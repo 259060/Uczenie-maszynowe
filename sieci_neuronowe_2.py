@@ -67,6 +67,7 @@ public class NeuralNetwork{
 
 NeuralNetwork network = new NeuralNetwork(2,3,2);
 
+###################################################
 
 import numpy as np
 
@@ -122,3 +123,80 @@ prediction = network.classify(inputs)
 print("Outputs:", outputs)
 print("Predicted class:", prediction)
 
+#######################################################
+
+import numpy as np
+
+class Layer:
+    def __init__(self, num_nodes_in, num_nodes_out):
+        self.num_nodes_in = num_nodes_in
+        self.num_nodes_out = num_nodes_out
+        
+        # Inicjalizacja wag i biasów
+        # W C# 'new double[,]' tworzy same zera. W sieciach neuronowych zazwyczaj 
+        # chcemy losowe wagi na start, dlatego używam random.randn.
+        # Jeśli chcesz same zera jak w C#, użyj: np.zeros((num_nodes_in, num_nodes_out))
+        self.weights = np.random.randn(num_nodes_in, num_nodes_out)
+        self.biases = np.zeros(num_nodes_out)
+
+    def calculate_outputs(self, inputs):
+        """
+        Oblicza wynik warstwy.
+        Zamiast dwóch pętli for (jak w C#), używamy mnożenia macierzy (dot product).
+        Wzór: inputs * weights + biases
+        """
+        # To jedno polecenie zastępuje zagnieżdżone pętle z C#:
+        return np.dot(inputs, self.weights) + self.biases
+
+
+class NeuralNetwork:
+    def __init__(self, layer_sizes):
+        """
+        Tworzy sieć na podstawie listy rozmiarów warstw, np. [2, 3, 2]
+        odpowiednik C#: params int[] layerSizes
+        """
+        self.layers = []
+        # Pętla tworząca warstwy (od i do i+1)
+        for i in range(len(layer_sizes) - 1):
+            layer = Layer(layer_sizes[i], layer_sizes[i + 1])
+            self.layers.append(layer)
+
+    def calculate_outputs(self, inputs):
+        """
+        Przepuszcza dane przez całą sieć (Feed Forward)
+        """
+        # Upewniamy się, że input to tablica numpy
+        current_inputs = np.array(inputs)
+        
+        for layer in self.layers:
+            current_inputs = layer.calculate_outputs(current_inputs)
+            
+        return current_inputs
+
+    def classify(self, inputs):
+        """
+        Zwraca indeks neuronu z największą wartością na wyjściu
+        """
+        outputs = self.calculate_outputs(inputs)
+        # np.argmax to odpowiednik Twojej funkcji IndexOfMaxValue
+        return np.argmax(outputs)
+
+# --- PRZYKŁAD UŻYCIA (odpowiednik main) ---
+
+# 1. Tworzymy sieć: 2 wejścia -> 3 neurony ukryte -> 2 wyjścia
+network = NeuralNetwork([2, 3, 2])
+
+# 2. Przykładowe dane wejściowe
+inputs = [0.5, 0.8]
+
+# 3. Obliczenie wyniku (surowe wartości)
+outputs = network.calculate_outputs(inputs)
+print(f"Surowe wyjścia sieci: {outputs}")
+
+# 4. Klasyfikacja (który indeks wygrał)
+predicted_class = network.classify(inputs)
+print(f"Przewidziana klasa (indeks): {predicted_class}")
+
+# Opcjonalnie: Ręczne ustawienie wag (jak w zmiennych na górze Twojego kodu)
+# Dostęp do pierwszej warstwy: network.layers[0]
+# network.layers[0].weights[0, 1] = 0.5
