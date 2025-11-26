@@ -136,7 +136,7 @@ dobrze_zaklasyfikowane_test = 0
 for k in range(test_data[0].shape[0]):
 
   pierwszy_obraz = test_data[0][k].reshape(-1,1)
-  oczekiwana_laleiczba = test_data[1][k]
+  oczekiwana_liczba = test_data[1][k]
   oczekiwany_wynik = np.zeros((nody_wyjście,1))
   oczekiwany_wynik[oczekiwana_liczba] = 1
 
