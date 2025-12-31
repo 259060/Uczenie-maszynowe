@@ -158,6 +158,64 @@ def tworzenie_modelu_3_warstwy_dropout_25_batch_normalization():
   ])
   return model
 
+def tworzenie_modelu_3_warstwy_dropout_25_padding():
+  model = tf.keras.Sequential([
+      tf.keras.layers.Input(shape=(32, 32, 3)),
+      tf.keras.layers.Rescaling(1./255),
+
+      tf.keras.layers.Conv2D(32, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Conv2D(64, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Conv2D(128, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Flatten(),
+      tf.keras.layers.Dense(256), 
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.Dropout(0.25),
+      tf.keras.layers.Dense(10), 
+      tf.keras.layers.Activation("softmax")
+  ])
+  return model
+
+def tworzenie_modelu_3_warstwy_dropout_25_batch_normalization_padding():
+  model = tf.keras.Sequential([
+      tf.keras.layers.Input(shape=(32, 32, 3)),
+      tf.keras.layers.Rescaling(1./255),
+
+      tf.keras.layers.Conv2D(32, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Conv2D(64, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Conv2D(128, kernel_size = 3, padding='same'),
+      tf.keras.layers.BatchNormalization(),
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2),
+
+      tf.keras.layers.Flatten(),
+      tf.keras.layers.Dense(256), 
+      tf.keras.layers.Activation("relu"),
+      tf.keras.layers.Dropout(0.25),
+      tf.keras.layers.Dense(10), 
+      tf.keras.layers.Activation("softmax")
+  ])
+  return model
+
 def modelowanie(model, epoki=20):
 
     model.compile(
@@ -181,3 +239,5 @@ modelowanie(tworzenie_modelu_3_warstwy_dropout_15())
 modelowanie(tworzenie_modelu_3_warstwy_dropout_25())
 modelowanie(tworzenie_modelu_3_warstwy_dropout_50())
 modelowanie(tworzenie_modelu_3_warstwy_dropout_25_batch_normalization())
+modelowanie(tworzenie_modelu_3_warstwy_dropout_25_padding()) # najlepszy wynik 0.77
+modelowanie(tworzenie_modelu_3_warstwy_dropout_25_batch_normalization_padding())
